@@ -1,0 +1,17 @@
+#! /usr/bin/env bash
+
+mkdir -p /tmp/serve_dir{,2,3}
+echo 'site 1 <a href="/page.html"> a link</a>' > /tmp/serve_dir/index.html
+echo 'site 1 page' > /tmp/serve_dir/page.html
+
+echo 'site 2 <a href="/page.html"> a link</a>' > /tmp/serve_dir2/index.html
+echo 'site 2 page' > /tmp/serve_dir2/page.html
+
+echo 'site 3 <a href="/page.html"> a link</a>' > /tmp/serve_dir3/index.html
+echo 'site 3 page' > /tmp/serve_dir3/page.html
+
+(cd /tmp/serve_dir3 && python -m http.server 3001) &
+bg_pid=$!
+trap 'kill $bg_pid' EXIT
+
+cargo run
